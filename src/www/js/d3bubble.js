@@ -44,6 +44,7 @@ var d3bubble = function(){
                 cluster: i,
                 radius:  r,
                 name: d.name,
+                description: d.description,
                 x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
                 y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
             };
@@ -73,8 +74,55 @@ var d3bubble = function(){
             .attr("height", height);
 
 
+
+
+        //LEGEND
+        var legendContainer = svg.append("g")
+                            .attr("transform", "translate(0, 20)")
+                            ;
+
+        var legend = legendContainer.selectAll(".legend")
+                  .data(data)
+                  .enter().append("g")
+                  .attr("class", function(d,i) {console.log(d,i); return 'legend cluster' + i;})
+                  .attr("dx", width )
+                  .attr("transform", function (d, i) { 
+                    return "translate(0," + i * 20 + ")"; 
+                  })
+                            .on("mouseover", legendMouseover)
+          .on("mouseout", legendMouseout)
+;
+
+        legend.append("rect")
+          .attr("class", function(d,i) {return 'legend cluster' + i;})
+          .attr("x", width - 10)
+          .attr("width", 10)
+          .attr("height", 10)
+          .attr("fill", function(d,i){return colorScheme[i]});
+
+        legend.append("text")
+          .data(data)
+          .attr("x", width - 20)
+          .attr("y", 6)
+          .attr("dy", ".35em")
+          .style("text-anchor", "end")
+          .text(function (d) { return d.description;})
+
+        function legendMouseover(d,i){
+            var sel = d3.selectAll('.node-container .cluster' + i )
+                .classed("bubble-hover", true)
+                .classed("stroke", true)
+        } 
+        function legendMouseout(d){
+            var sel = d3.selectAll('.bubble-hover' )
+                .classed("bubble-hover", false)
+        } 
+
+
         //GROUPS
-        var node = svg.selectAll("circle")
+        var nodeContainer = svg.append("g")
+                            .attr("class","node-container")
+        var node = nodeContainer.selectAll("circle")
             .data(nodes)
             .enter().append("g")
             .attr("class", function(d){return "cluster"+d.cluster;})
@@ -134,6 +182,7 @@ var d3bubble = function(){
             var background = color(d.cluster);
             return brightness(d3.rgb(background)) < 120 ? "#fff" : "#000";
         };
+
 
 
 

@@ -51,7 +51,6 @@ iframe body {
 
 #topic-bubbles circle {
     transition:0.2s;
-    stroke:1px black;
 }
 
 #topic-bubbles text {
@@ -68,6 +67,10 @@ iframe body {
 #topic-bubbles .bubble-hover text {
     transition:0.2s;
     transform: scale(1.2);
+}
+
+#topic-bubbles .stroke circle {
+    stroke:#ddd 1px;
 }
 
 
@@ -95,42 +98,55 @@ iframe body {
 
 .cluster0{
     background-color:"#2185D0";
+    fill: "#2185D0";
 }
 .cluster1{
     background-color:"#F2711C";
+    fill: "#F2711C";
 }
 .cluster2{
     background-color:"#E03997";
+    fill: "#E03997";
 }
 .cluster3{
     background-color:"#00B5AD";
+    fill: "#00B5AD";
 }
 .cluster4{
     background-color:"#FBBD08";
+    fill: "#FBBD08";
 }
 .cluster5{
     background-color:"#6435C9";
+    fill: "#6435C9";
 }
 .cluster6{
     background-color:"#B5CC18";
+    fill: "#B5CC18";
 }
 .cluster7{
     background-color:"#21BA45";
+    fill: "#21BA45";
 }
 .cluster8{
     background-color:"#DB2828";
+    fill: "#DB2828";
 }
 .cluster9{
     background-color:"#A333C8";
+    fill: "#A333C8";
 }
 .cluster10{
     background-color:"#A5673F";
+    fill: "#A5673F";
 }
 .cluster11{
     background-color:"#767676";
+    fill: "#767676";
 }
 .cluster12{
     background-color:"#1B1C1D";
+    fill: "#1B1C1D";
 }
 
 

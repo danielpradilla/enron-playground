@@ -17,9 +17,11 @@ topics = db.topics
 authortopics = db.authortopics
 
 
-def generate_topics(model,num_topics,num_words):
+def generate_topics(model,num_topics,num_words,topic_names):
     #build a collection of topics based on the model
     db_records = get_topic_words(model,num_topics,num_words)
+    for i, db_record in enumerate(db_records):
+        db_record['description'] = topic_names[i]
     #print db_records
     topics.drop()
     object_ids = topics.insert_many(db_records, ordered=False).inserted_ids
@@ -88,13 +90,14 @@ def main():
     model_file = '../gensim/at/model'
     num_topics=10
     num_words=10
+    topic_names = ['Corporate','IT Services', 'Investor Market', 'e-commerce', 'Scheduling', 'Planning', 'Sports', 'Contracts', 'Headquarters', 'California']
     
     if not os.path.isfile(dictionary_file) or not os.path.isfile(model_file):
         return
 
     model = gensim.models.AuthorTopicModel.load(model_file)
 
-    generate_topics(model,num_topics,num_words)
+    generate_topics(model,num_topics,num_words,topic_names)
 
     print_topics(model,num_topics,num_words)
 
