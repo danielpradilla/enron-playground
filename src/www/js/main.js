@@ -185,7 +185,7 @@ ep.topicClick = function(evt){
 	ep.getAuthorCards(topic);
 	$('#author-documents-container').html('');
 	$('#document-container').html('');
-	document.querySelector('#author-cards-title').scrollIntoView({block: "start", behavior: "smooth"}); 
+	//document.querySelector('#author-cards-title').scrollIntoView({block: "start", behavior: "smooth"}); 
 }
 
 

@@ -15,14 +15,20 @@ iframe body {
 }
 
 #container{
+    margin-top:1em;
     padding-bottom:100px;
 }
 
-.ui.container > h1 {
+#header h1 {
     font-size: 3em;
-    text-align: center;
+    text-align: center;    
     font-weight: normal;
+    margin-bottom: 0;
 }
+#header div {
+    text-align: center;
+}
+
 .ui.container > h2.dividing.header {
     font-size: 2em;
     font-weight: normal;
