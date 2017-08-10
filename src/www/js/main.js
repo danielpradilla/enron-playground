@@ -6,6 +6,8 @@ ep.url = '/gunicorn';
 ep.mockTopics = 'data/topics.json';
 ep.mockAuthors = 'data/authors.json';
 
+ep.currentCluster = '';
+
 
 ep.onTopicClick = function(data){
 
@@ -148,7 +150,7 @@ ep.getDocumentHTML = function(docs){
 			<h4>${doc.to}</h4>
 			<h3>${doc.subject}</h4>
 			<h4>${doc.date}</h4>
-			<div>${doc.body}</div>
+			<div class="body">${doc.body}</div>
 			`;
 }
 
@@ -156,8 +158,21 @@ ep.updateDocument = function(data){
 	let html = ep.getDocumentHTML(data);
 	$('#document-container').html(html);
 	$('#document').dimmer('hide');	
+	ep.highlighter()
 }
 
+
+ep.highlighter = function(){
+	let clusterWords = [...document.querySelectorAll('svg g.cluster0 text')].map(el=>el.innerHTML)
+	let container = document.querySelector('#document .body');
+	let text = container.innerHTML;
+	clusterWords.forEach(word=>{
+		let re = new RegExp('(>[^<.]*)(' + word + ')([^<.]*)','g');
+		let replacement = '$1<span class="' + ep.currentCluster + '">$2</span>$3';
+		text = text.replace(re, replacement);
+	});
+	container.innerHTML = text;
+}
 
 ep.addEventListeners = function(){
 	$(document).on("node-click", ep.topicClick); //jquery event for a lazy way of communicating with the d3chart
@@ -166,6 +181,7 @@ ep.addEventListeners = function(){
 
 ep.topicClick = function(evt){
 	let topic = 'topic'+evt.d.cluster; //topicN zero based
+	ep.currentCluster='topic'+evt.d.cluster;
 	ep.getAuthorCards(topic);
 	$('#author-documents-container').html('');
 	$('#document-container').html('');

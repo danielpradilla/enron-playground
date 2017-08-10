@@ -4,7 +4,7 @@ var d3bubble = function(){
         padding = 1.5, 
         clusterPadding = 6, 
         maxRadius = 80;
-        minRadius = 30;
+        minRadius = 25;
         valueMultiplier = 50;
 
 
@@ -77,6 +77,7 @@ var d3bubble = function(){
         var node = svg.selectAll("circle")
             .data(nodes)
             .enter().append("g")
+            .attr("class", function(d){return "cluster"+d.cluster;})
             .call(force.drag)
             .call(mouseEvents);
 
@@ -112,12 +113,22 @@ var d3bubble = function(){
         //LABELS
         node.append("text")
             .text(function (d) {return d.name;})
-            .attr("dx", function(d){ return (-8 * d.name.length)/2;})
+            .attr("dx", textDx)
             .attr("dy", ".35em")
+            .attr("font-size", fontSize)
             .text(function (d) {return d.name})
             .style("stroke", "none")
             .style("fill", textFill)
 
+
+        function textDx(d){
+            return (-(5 * d.radius/minRadius) * d.name.length)/2
+        }
+
+        function fontSize(d){
+            //function of the radius
+            return ''+ (10 * d.radius/minRadius) + 'px';        
+        }
 
         function textFill(d){
             var background = color(d.cluster);
@@ -128,7 +139,7 @@ var d3bubble = function(){
 
 
         function tick(e) {
-            var jitter = 0.5;
+            var jitter = 0.2;
             node.each(cluster(10 * e.alpha * e.alpha))
                 .each(collide(jitter))
             //.attr("transform", functon(d) {});
@@ -163,7 +174,7 @@ var d3bubble = function(){
             };
         }
 
-            // Resolves collisions between d and all other circles.
+        // Resolves collisions between d and all other circles.
         function collide(alpha) {
             var quadtree = d3.geom.quadtree(nodes);
             return function (d) {
