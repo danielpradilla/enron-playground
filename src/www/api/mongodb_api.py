@@ -19,7 +19,7 @@ authortopics = db.authortopics
 def get_topics():
     rows = topics.find()
     rtn = build_json_response(rows)
-    print rtn
+    #print rtn
     return rtn
 
 def get_author_topics(topicname):
@@ -36,6 +36,9 @@ def get_message(id):
 def get_message_list(author):
     pipeline = [
         {"$match": {"from": author}},
+        { "$match": {"spacy": {"$exists": True}}}, #select only the ones with entities
+        {"$project":{"from":1, "message-id":1, "spacy.tokens":1, "spacyLength":{"$size":"$spacy"}}},
+        {"$match": {"spacyLength": {"$gt": 2}}}, 
         {"$lookup":{"from": "messages", "localField": "message-id", "foreignField": "message-id","as": "message"}},
         {"$unwind": "$message"},
         {"$project": {"body":"$message.body", "from": "$from", "message-id": "$message-id", "date": "$message.date", "subject": "$message.subject"}},
@@ -43,6 +46,7 @@ def get_message_list(author):
     ]
     rows = list(messageswords.aggregate(pipeline, allowDiskUse=True))
     rtn = build_json_response(rows)
+    #print rtn
     return rtn
     
 def build_json_response(response):

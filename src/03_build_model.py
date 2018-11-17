@@ -119,10 +119,10 @@ def get_lda_model(dictionary, corpus, num_topics, passes):
     """
     return model  
 
-def get_at_model(dictionary, corpus, author2doc, num_topics, passes):
+def get_at_model(dictionary, corpus, author2doc, num_topics, passes, iterations):
     start_time = time.time()
     models = []
-    model = gensim.models.atmodel.AuthorTopicModel(corpus, num_topics=num_topics, id2word=dictionary, author2doc=author2doc, passes=passes, random_state=1, chunksize=2000, eval_every=None, iterations=1)
+    model = gensim.models.atmodel.AuthorTopicModel(corpus, num_topics=num_topics, id2word=dictionary, author2doc=author2doc, passes=passes, random_state=1, chunksize=2000, eval_every=None, iterations=iterations)
 
     #get the Umass topic coherence
     #http://radimrehurek.com/gensim/models/ldamodel.html#gensim.models.ldamodel.LdaModel.top_topics
@@ -164,6 +164,7 @@ def main():
     num_topics=10
     passes=2
     sample_size=500000
+    iterations=50
     
     if not os.path.isfile(dictionary_file) or not os.path.isfile(model_file):
         generate_messagewords(sample_size)
@@ -176,7 +177,7 @@ def main():
         corpus = get_corpus(dictionary, records)
         print("--corpus done %s seconds ---" % (time.time() - start_time))
         #model = get_lda_model(dictionary, corpus, num_topics, passes)
-        model = get_at_model(dictionary, corpus, author2doc, num_topics, passes)
+        model = get_at_model(dictionary, corpus, author2doc, num_topics, passes, iterations)
         model.save(model_file)
     else:
         dictionary = gensim.corpora.Dictionary.load(dictionary_file)

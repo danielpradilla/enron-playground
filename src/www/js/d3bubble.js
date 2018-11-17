@@ -1,10 +1,10 @@
 var d3bubble = function(){
     var width = 960,
-        height = 800,
+        height = 720,
         padding = 1.5, 
         clusterPadding = 6, 
-        maxRadius = 80;
-        minRadius = 25;
+        maxRadius = height/10;
+        minRadius = maxRadius*0.3;
         valueMultiplier = 50;
 
 
@@ -65,7 +65,7 @@ var d3bubble = function(){
             .nodes(nodes)
             .size([width, height])
             .gravity(0.02)
-            .charge(0)
+            .charge(function(d){return d.radius;})
             .on("tick", tick)
             .start();
 
@@ -175,7 +175,8 @@ var d3bubble = function(){
 
         function fontSize(d){
             //function of the radius
-            return ''+ (10 * d.radius/minRadius) + 'px';        
+            return ''+ (10 * d.radius/minRadius) + 'px'; 
+                
         }
 
         function textFill(d){
